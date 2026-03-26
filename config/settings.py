@@ -12,7 +12,7 @@ import os
 META_ACCESS_TOKEN    = os.getenv("META_ACCESS_TOKEN")
 META_PHONE_NUMBER_ID = os.getenv("META_PHONE_NUMBER_ID")
 YOUR_WHATSAPP_NUMBER = os.getenv("YOUR_WHATSAPP_NUMBER")
-# ANTHROPIC_API_KEY is read directly via os.getenv() in news_sender.py
+ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY") 
 
 
 # ─────────────────────────────────────────────
