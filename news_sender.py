@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Firstpost → WhatsApp Daily News Snapshot
-Fetches headlines via Google News RSS, summarizes with Claude,
+Fetches headlines via Google News RSS, summarizes with Claude Haiku,
 and sends via Meta's WhatsApp Cloud API.
 """
 
@@ -34,7 +34,7 @@ HEADERS = {
 # ─────────────────────────────────────────────
 
 def summarize_from_text(title: str, description: str) -> str:
-    """Summarize a news item using its title and RSS description."""
+    """Summarize a news item using Claude Haiku."""
     try:
         content = description if len(description) > 50 else title
         client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
@@ -54,7 +54,7 @@ def summarize_from_text(title: str, description: str) -> str:
         return message.content[0].text.strip()
     except Exception as e:
         print(f"      ⚠️  Summarization failed: {e}")
-        return title
+        return description[:200] if len(description) > 50 else title
 
 
 # ─────────────────────────────────────────────
@@ -204,11 +204,14 @@ def main():
     print("🚀 Firstpost → WhatsApp (Meta Cloud API)")
     print("=" * 50)
 
-    if not META_ACCESS_TOKEN or "EAA" not in META_ACCESS_TOKEN:
-        print("❌ META_ACCESS_TOKEN not configured.")
+    if not META_ACCESS_TOKEN:
+        print("❌ META_ACCESS_TOKEN not set.")
         return
-    if not META_PHONE_NUMBER_ID or META_PHONE_NUMBER_ID == "YOUR_PHONE_NUMBER_ID":
-        print("❌ META_PHONE_NUMBER_ID not configured.")
+    if not META_PHONE_NUMBER_ID:
+        print("❌ META_PHONE_NUMBER_ID not set.")
+        return
+    if not YOUR_WHATSAPP_NUMBER:
+        print("❌ YOUR_WHATSAPP_NUMBER not set.")
         return
     if not os.getenv("ANTHROPIC_API_KEY"):
         print("❌ ANTHROPIC_API_KEY not set.")
